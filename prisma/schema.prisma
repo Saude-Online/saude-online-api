@@ -33,6 +33,7 @@ model User {
 model Patient {
   id        String   @id @default(uuid())
   name      String
+  age       Int      @default(0)
   document  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

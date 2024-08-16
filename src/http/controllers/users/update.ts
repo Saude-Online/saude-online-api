@@ -27,16 +27,14 @@ export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
   }
 
   try {
-    const updatedUser = await updateUserUseCase({
+    await updateUserUseCase({
       id,
       oldPassword,
       newPassword,
       name,
     })
 
-    return reply.status(200).send({
-      user: updatedUser,
-    })
+    return reply.status(204).send()
   } catch (error) {
     if (error instanceof InvalidCredentialsError) {
       return reply.status(400).send({ message: error.message })

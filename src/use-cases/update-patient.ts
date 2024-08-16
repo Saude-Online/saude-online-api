@@ -5,6 +5,7 @@ interface updatePatientUseCaseRequest {
   id: string
   data: {
     name?: string
+    age?: number
     document?: string
   }
 }
