@@ -13,6 +13,7 @@ export async function updatePatient(
 
   const updatePatientBodySchema = z.object({
     name: z.string().optional(),
+    age: z.number().optional(),
     document: z.string().optional(),
   })
 
