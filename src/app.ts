@@ -7,9 +7,12 @@ import { ZodError } from 'zod'
 
 import { usersRoutes } from '@/http/controllers/users/routes'
 import { patientsRoutes } from '@/http/controllers/patients/routes'
+import { schedulesRoutes } from '@/http/controllers/schedules/routes'
 import { env } from '@/env'
 
-export const app = fastify()
+export const app = fastify({
+  logger: env.NODE_ENV !== 'production',
+})
 
 app.register(fastifyCors, {
   origin: ['http://localhost:5173'],
@@ -32,6 +35,7 @@ app.register(fastifyCookie)
 
 app.register(usersRoutes)
 app.register(patientsRoutes)
+app.register(schedulesRoutes)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {

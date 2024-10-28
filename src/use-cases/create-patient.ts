@@ -1,17 +1,17 @@
 import { prisma } from '@/lib/prisma'
 import { PatientAlreadyExistsError } from '@/use-cases/errors/patient-already-exists'
 
-interface CreateUseCaseRequest {
+interface CreatePatientUseCaseRequest {
   name: string
   age: number
   document: string
 }
 
-export async function createUseCase({
+export async function createPatientUseCase({
   name,
   age,
   document,
-}: CreateUseCaseRequest) {
+}: CreatePatientUseCaseRequest) {
   const patientWithSameDocument = await prisma.patient.findFirst({
     where: {
       document,

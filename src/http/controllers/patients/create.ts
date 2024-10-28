@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 
-import { createUseCase } from '@/use-cases/create-patient'
+import { createPatientUseCase } from '@/use-cases/create-patient'
 import { PatientAlreadyExistsError } from '@/use-cases/errors/patient-already-exists'
 
 export async function createPatient(
@@ -17,7 +17,7 @@ export async function createPatient(
   const { name, age, document } = createBodySchema.parse(request.body)
 
   try {
-    await createUseCase({ name, age, document })
+    await createPatientUseCase({ name, age, document })
   } catch (error) {
     if (error instanceof PatientAlreadyExistsError) {
       return reply.status(409).send({ message: error.message })

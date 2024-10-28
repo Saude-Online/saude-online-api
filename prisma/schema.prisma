@@ -31,12 +31,27 @@ model User {
 }
 
 model Patient {
-  id        String   @id @default(uuid())
+  id        String     @id @default(uuid())
   name      String
-  age       Int      @default(0)
+  age       Int        @default(0)
   document  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Schedule  Schedule[]
+
+  @@map(name: "patients")
+}
+
+model Schedule {
+  id        String   @id @default(uuid())
+  patientId String
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  dateHour  DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map(name: "patients")
+  @@index([patientId], name: "patientId")
+  @@index([dateHour], name: "dateHour")
+  @@index([patientId, dateHour], name: "patientId_date")
+  @@map(name: "schedules")
 }
