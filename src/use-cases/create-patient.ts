@@ -3,14 +3,16 @@ import { PatientAlreadyExistsError } from '@/use-cases/errors/patient-already-ex
 
 interface CreatePatientUseCaseRequest {
   name: string
-  age: number
+  age: number | null
   document: string
+  userId: string
 }
 
 export async function createPatientUseCase({
   name,
   age,
   document,
+  userId,
 }: CreatePatientUseCaseRequest) {
   const patientWithSameDocument = await prisma.patient.findFirst({
     where: {
@@ -25,8 +27,11 @@ export async function createPatientUseCase({
   await prisma.patient.create({
     data: {
       name,
-      age,
+      age: age ?? undefined,
       document,
+      user: {
+        connect: { id: userId }, // Conectando o paciente ao usuário existente
+      },
     },
   })
 }

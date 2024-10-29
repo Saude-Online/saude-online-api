@@ -13,7 +13,7 @@ export async function createSchedule(
     patient: z.object({
       id: z.string().optional(),
       name: z.string(),
-      age: z.number(),
+      age: z.number().nullable(),
       document: z.string(),
     }),
     dateHour: z.string(),

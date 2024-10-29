@@ -25,11 +25,13 @@ export async function registerUseCase({
     throw new UserAlreadyExistsError()
   }
 
-  await prisma.user.create({
+  const user = await prisma.user.create({
     data: {
       name,
       username,
       password: password_hash,
     },
   })
+
+  return user.id
 }

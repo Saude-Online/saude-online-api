@@ -26,6 +26,7 @@ model User {
   role      ROLE     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  patient   Patient? @relation
 
   @@map(name: "users")
 }
@@ -33,11 +34,13 @@ model User {
 model Patient {
   id        String     @id @default(uuid())
   name      String
-  age       Int        @default(0)
-  document  String
+  age       Int?
+  document  String     @unique
+  userId    String?    @unique
+  user      User?      @relation(fields: [userId], references: [id])
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  Schedule  Schedule[]
+  schedules Schedule[]
 
   @@map(name: "patients")
 }

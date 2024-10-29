@@ -4,7 +4,7 @@ interface CreateUseCaseRequest {
   patient: {
     id?: string
     name: string
-    age: number
+    age: number | null
     document: string
   }
   dateHour: Date

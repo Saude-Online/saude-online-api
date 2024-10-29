@@ -10,14 +10,15 @@ export async function createPatient(
 ) {
   const createBodySchema = z.object({
     name: z.string(),
-    age: z.number(),
+    age: z.number().nullable(),
     document: z.string(),
+    userId: z.string(),
   })
 
-  const { name, age, document } = createBodySchema.parse(request.body)
+  const { name, age, document, userId } = createBodySchema.parse(request.body)
 
   try {
-    await createPatientUseCase({ name, age, document })
+    await createPatientUseCase({ name, age, document, userId })
   } catch (error) {
     if (error instanceof PatientAlreadyExistsError) {
       return reply.status(409).send({ message: error.message })
