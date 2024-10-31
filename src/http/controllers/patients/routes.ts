@@ -8,14 +8,18 @@ import { deletePatient } from './delete'
 import { verifyUserRole } from '@/http/middlewares/verify-user-role'
 
 export async function patientsRoutes(app: FastifyInstance) {
-  app.addHook('onRequest', verifyJWT)
+  app.post('/patients', createPatient) // Permitir criar paciente quando o usuário se cadastrar
 
-  app.post('/patients', createPatient)
-  app.get('/patients', searchPatient)
-  app.put('/patients/:id', updatePatient)
-  app.delete(
-    '/patients/:id',
-    { onRequest: [verifyUserRole('ADMIN')] },
-    deletePatient,
-  )
+  // Rotas autenticadas
+  app.register(async (protectedRoutes) => {
+    protectedRoutes.addHook('onRequest', verifyJWT)
+
+    protectedRoutes.get('/patients', searchPatient)
+    protectedRoutes.put('/patients/:id', updatePatient)
+    protectedRoutes.delete(
+      '/patients/:id',
+      { onRequest: [verifyUserRole('ADMIN')] },
+      deletePatient,
+    )
+  })
 }

@@ -17,6 +17,9 @@ export async function getUserProfileUseCase({
     where: {
       id: userId,
     },
+    include: {
+      patient: true, // Inclui os dados relacionados de `patients`
+    },
   })
 
   if (!user) {
