@@ -19,14 +19,16 @@ enum ROLE {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  name      String
-  password  String
-  role      ROLE     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  patient   Patient? @relation
+  id          String      @id @default(uuid())
+  username    String      @unique
+  name        String
+  crm         String?     @unique
+  password    String
+  role        ROLE        @default(USER)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  patient     Patient?    @relation
+  specialties Specialty[] @relation("UserSpecialties")
 
   @@map(name: "users")
 }
@@ -58,4 +60,12 @@ model Schedule {
   @@index([dateHour], name: "dateHour")
   @@index([patientId, dateHour], name: "patientId_date")
   @@map(name: "schedules")
+}
+
+model Specialty {
+  id    String @id @default(uuid())
+  name  String
+  users User[] @relation("UserSpecialties")
+
+  @@map(name: "specialties")
 }
