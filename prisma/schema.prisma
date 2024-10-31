@@ -36,6 +36,7 @@ model Patient {
   name      String
   age       Int?
   document  String     @unique
+  phone     String?
   userId    String?    @unique
   user      User?      @relation(fields: [userId], references: [id])
   createdAt DateTime   @default(now())
