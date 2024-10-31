@@ -8,13 +8,24 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
   const registerBodySchema = z.object({
     name: z.string(),
     username: z.string(),
+    crm: z.string().optional(),
     password: z.string().min(6),
+    role: z.enum(['USER', 'ADMIN']).optional(),
+    specialties: z.array(z.string()).optional(),
   })
 
-  const { name, username, password } = registerBodySchema.parse(request.body)
+  const { name, username, crm, password, role, specialties } =
+    registerBodySchema.parse(request.body)
 
   try {
-    const userId = await registerUseCase({ name, username, password })
+    const userId = await registerUseCase({
+      name,
+      username,
+      crm,
+      password,
+      role,
+      specialties,
+    })
 
     return reply.status(201).send(userId)
   } catch (error) {
