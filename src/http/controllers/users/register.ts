@@ -3,6 +3,7 @@ import { z } from 'zod'
 
 import { registerUseCase } from '@/use-cases/register'
 import { UserAlreadyExistsError } from '@/use-cases/errors/user-already-exists'
+import { CrmAlreadyExistsError } from '@/use-cases/errors/crm-already-exists'
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
   const registerBodySchema = z.object({
@@ -29,7 +30,12 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
 
     return reply.status(201).send(userId)
   } catch (error) {
+    console.log(error)
     if (error instanceof UserAlreadyExistsError) {
+      return reply.status(409).send({ message: error.message })
+    }
+
+    if (error instanceof CrmAlreadyExistsError) {
       return reply.status(409).send({ message: error.message })
     }
 

@@ -1,14 +1,16 @@
-import { prisma } from '@/lib/prisma'
-import { hash } from 'bcryptjs'
-import { UserAlreadyExistsError } from '@/use-cases/errors/user-already-exists'
+import { PrismaClient } from '@prisma/client'
+import { UserAlreadyExistsError } from './errors/user-already-exists'
+import { CrmAlreadyExistsError } from './errors/crm-already-exists'
 
-interface RegisterUseCaseRequest {
+const prisma = new PrismaClient()
+
+interface RegisterUseCaseInput {
   name: string
   username: string
   crm?: string
   password: string
-  role?: 'USER' | 'ADMIN' // Padrão é 'USER'
-  specialties?: string[] // Se for ADMIN (Médico), pode ter especialidades
+  role?: 'USER' | 'ADMIN'
+  specialties?: string[]
 }
 
 export async function registerUseCase({
@@ -17,34 +19,32 @@ export async function registerUseCase({
   crm,
   password,
   role = 'USER',
-  specialties,
-}: RegisterUseCaseRequest) {
-  const password_hash = await hash(password, 6)
+  specialties = [],
+}: RegisterUseCaseInput) {
+  const existingUser = await prisma.user.findUnique({ where: { username } })
+  if (existingUser) throw new UserAlreadyExistsError()
 
-  const userWithSameUsername = await prisma.user.findUnique({
-    where: {
-      username,
-    },
-  })
-
-  if (userWithSameUsername) {
-    throw new UserAlreadyExistsError()
+  if (crm) {
+    const existingCrm = await prisma.user.findUnique({ where: { crm } })
+    if (existingCrm) throw new CrmAlreadyExistsError()
   }
+
+  const existingSpecialties = await prisma.specialty.findMany({
+    where: { id: { in: specialties } },
+  })
 
   const user = await prisma.user.create({
     data: {
       name,
       username,
       crm,
-      password: password_hash,
+      password,
       role,
       specialties: {
-        create: specialties?.map((specialty) => ({
-          name: specialty,
-        })),
+        connect: existingSpecialties.map((specialty) => ({ id: specialty.id })),
       },
     },
   })
 
-  return user.id
+  return { userId: user.id }
 }
