@@ -1,4 +1,4 @@
-import { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 import { verifyJWT } from '@/http/middlewares/verify-jwt'
 
 import { register } from './register'
@@ -22,7 +22,7 @@ export async function usersRoutes(app: FastifyInstance) {
   app.register(async (protectedRoutes) => {
     protectedRoutes.addHook('onRequest', verifyJWT)
 
-    protectedRoutes.get('/', list)
+    protectedRoutes.get('/users', list)
     protectedRoutes.get('/me', profile)
     protectedRoutes.put('/users/:id', updateUser)
   })

@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 
 import { createPatientUseCase } from '@/use-cases/create-patient'
@@ -12,8 +12,8 @@ export async function createPatient(
     name: z.string(),
     age: z.number().nullable(),
     document: z.string(),
-    phone: z.string().nullable(),
-    userId: z.string(),
+    phone: z.string().optional(),
+    userId: z.string().optional(),
   })
 
   const { name, age, document, phone, userId } = createBodySchema.parse(

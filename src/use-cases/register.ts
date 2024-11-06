@@ -1,13 +1,14 @@
 import { PrismaClient } from '@prisma/client'
 import { UserAlreadyExistsError } from './errors/user-already-exists'
 import { CrmAlreadyExistsError } from './errors/crm-already-exists'
+import { hash } from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
 interface RegisterUseCaseInput {
   name: string
   username: string
-  crm?: string
+  crm?: string | null
   password: string
   role?: 'USER' | 'ADMIN'
   specialties?: string[]
@@ -21,6 +22,8 @@ export async function registerUseCase({
   role = 'USER',
   specialties = [],
 }: RegisterUseCaseInput) {
+  const password_hash = await hash(password, 6)
+
   const existingUser = await prisma.user.findUnique({ where: { username } })
   if (existingUser) throw new UserAlreadyExistsError()
 
@@ -37,8 +40,8 @@ export async function registerUseCase({
     data: {
       name,
       username,
-      crm,
-      password,
+      crm: crm || null,
+      password: password_hash,
       role,
       specialties: {
         connect: existingSpecialties.map((specialty) => ({ id: specialty.id })),

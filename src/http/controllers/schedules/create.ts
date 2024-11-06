@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 
 import { createScheduleUseCase } from '@/use-cases/create-schedule'
@@ -24,7 +24,7 @@ export async function createSchedule(
   try {
     const parsedDateHour = parseISO(dateHour)
 
-    if (isNaN(parsedDateHour.getTime())) {
+    if (Number.isNaN(parsedDateHour.getTime())) {
       throw new Error('Invalid date format.')
     }
 

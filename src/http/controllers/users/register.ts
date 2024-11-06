@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 
 import { registerUseCase } from '@/use-cases/register'
@@ -9,7 +9,7 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
   const registerBodySchema = z.object({
     name: z.string(),
     username: z.string(),
-    crm: z.string().optional(),
+    crm: z.string().optional().nullable(),
     password: z.string().min(6),
     role: z.enum(['USER', 'ADMIN']).optional(),
     specialties: z.array(z.string()).optional(),
