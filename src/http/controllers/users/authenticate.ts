@@ -50,6 +50,7 @@ export async function authenticate(
       })
       .status(200)
       .send({
+        role: user.role,
         token,
       })
   } catch (error) {
