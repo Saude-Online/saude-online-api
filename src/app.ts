@@ -28,7 +28,7 @@ app.register(fastifyJwt, {
     cookieName: 'refreshToken',
     signed: false,
   },
-  sign: { expiresIn: '15m' },
+  sign: { expiresIn: '7d' },
 })
 
 app.register(fastifyCookie)

@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 
 import { authenticateUseCase } from '@/use-cases/authenticate'
@@ -50,6 +50,7 @@ export async function authenticate(
       })
       .status(200)
       .send({
+        role: user.role,
         token,
       })
   } catch (error) {

@@ -1,32 +1,31 @@
 import { prisma } from '@/lib/prisma'
 
 interface CreateUseCaseRequest {
-  patient: {
-    id?: string
-    name: string
-    age: number | null
-    document: string
-  }
+  specialistId: string
+  patientId: string
   dateHour: Date
 }
 
 export async function createScheduleUseCase({
-  patient,
+  specialistId,
+  patientId,
   dateHour,
 }: CreateUseCaseRequest) {
+  const existingPatient = await prisma.patient.findUnique({
+    where: {
+      id: patientId,
+    },
+  });
+
+  if (!existingPatient) {
+    throw new Error('Paciente não encontrado.');
+  }
+
   await prisma.schedule.create({
     data: {
+      specialistId,
+      patientId: existingPatient.id,
       dateHour,
-      patient: {
-        connectOrCreate: {
-          where: { id: patient.id || '' },
-          create: {
-            name: patient.name,
-            age: patient.age,
-            document: patient.document,
-          },
-        },
-      },
     },
-  })
+  });
 }

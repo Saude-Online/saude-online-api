@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { User } from '@prisma/client'
+import type { User } from '@prisma/client'
 
 interface listUsersUseCaseRequest {
   query: string
@@ -22,7 +22,7 @@ export async function listUsersUseCase({
         contains: query,
         mode: 'insensitive',
       },
-      ...(isDoctor && { crm: { not: null } }),
+      crm: isDoctor ? { not: null } : undefined,
     },
     take: 20,
     skip: (page - 1) * 20,
