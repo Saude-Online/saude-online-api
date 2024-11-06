@@ -10,16 +10,12 @@ export async function createSchedule(
   reply: FastifyReply,
 ) {
   const createBodySchema = z.object({
-    patient: z.object({
-      id: z.string().optional(),
-      name: z.string(),
-      age: z.number().nullable(),
-      document: z.string(),
-    }),
+    specialistId: z.string(),
+    patientId: z.string(),
     dateHour: z.string(),
   })
 
-  const { patient, dateHour } = createBodySchema.parse(request.body)
+  const { specialistId, patientId, dateHour } = createBodySchema.parse(request.body)
 
   try {
     const parsedDateHour = parseISO(dateHour)
@@ -28,7 +24,7 @@ export async function createSchedule(
       throw new Error('Invalid date format.')
     }
 
-    await createScheduleUseCase({ patient, dateHour: parsedDateHour })
+    await createScheduleUseCase({ specialistId, patientId, dateHour: parsedDateHour })
   } catch (error) {
     if (error instanceof ScheduleAlreadyExistsError) {
       return reply.status(409).send({ message: error.message })
