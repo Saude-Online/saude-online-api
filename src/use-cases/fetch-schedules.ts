@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { Schedule } from '@prisma/client'
+import type { Schedule } from '@prisma/client'
 import { parseISO, isValid } from 'date-fns'
 
 interface fetchSchedulesUseCaseRequest {
@@ -16,7 +16,7 @@ export async function fetchSchedulesUseCase({
   page,
 }: fetchSchedulesUseCaseRequest): Promise<fetchSchedulesUseCaseResponse> {
   let dateFilter: Date | undefined
-  let patientFilter: any
+  let patientFilter: any = {}
 
   const queryDate = parseISO(query)
   if (isValid(queryDate)) {
@@ -36,7 +36,7 @@ export async function fetchSchedulesUseCase({
   const schedules = await prisma.schedule.findMany({
     where: {
       ...(dateFilter ? { date: { equals: dateFilter } } : {}),
-      ...(patientFilter || {}),
+      ...(patientFilter),
     },
     take: 20,
     skip: (page - 1) * 20,
