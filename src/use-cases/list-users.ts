@@ -24,6 +24,9 @@ export async function listUsersUseCase({
       },
       crm: isDoctor ? { not: null } : undefined,
     },
+    include: {
+      specialties: true,
+    },
     take: 20,
     skip: (page - 1) * 20,
   })

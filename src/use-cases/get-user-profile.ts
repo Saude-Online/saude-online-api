@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error'
-import { User } from '@prisma/client'
+import type { User } from '@prisma/client'
 
 interface getUserProfileUseCaseRequest {
   userId: string
@@ -18,13 +18,23 @@ export async function getUserProfileUseCase({
       id: userId,
     },
     include: {
-      patient: true, // Inclui os dados relacionados de `patients`
+      patient: {
+        include: {
+          schedules: true, // Inclui as consultas do paciente
+        },
+      },
     },
   })
 
   if (!user) {
     throw new ResourceNotFoundError()
   }
+
+  if (user.patient) {
+    user.schedules = user.patient.schedules
+  }
+
+  Reflect.deleteProperty(user, 'password')
 
   return {
     user,
