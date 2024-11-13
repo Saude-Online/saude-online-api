@@ -15,10 +15,10 @@ export async function createScheduleUseCase({
     where: {
       id: patientId,
     },
-  });
+  })
 
   if (!existingPatient) {
-    throw new Error('Paciente não encontrado.');
+    throw new Error('Paciente não encontrado.')
   }
 
   await prisma.schedule.create({
@@ -27,5 +27,5 @@ export async function createScheduleUseCase({
       patientId: existingPatient.id,
       dateHour,
     },
-  });
+  })
 }
