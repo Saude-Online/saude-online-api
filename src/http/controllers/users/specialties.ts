@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyRequest, FastifyReply } from 'fastify'
 
 import { fetchSpecialtiesUseCase } from '@/use-cases/fetch-specialties'
 
