@@ -1,4 +1,4 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
+import type { FastifyReply, FastifyRequest } from 'fastify'
 
 export function verifyUserRole(roleToVerify: 'ADMIN' | 'USER') {
   return async (request: FastifyRequest, reply: FastifyReply) => {
