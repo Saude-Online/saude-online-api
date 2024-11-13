@@ -32,7 +32,7 @@ app.register(fastifyCors, {
     ? prodOrigins
     : devOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Set-Cookie'],
   credentials: true,
   maxAge: 86400,
 })
