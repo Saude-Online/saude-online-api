@@ -14,8 +14,13 @@ export const app = fastify({
   logger: env.NODE_ENV !== 'production',
 })
 
+const devOrigins = process.env.DEV_ORIGINS?.split(',') || []
+const prodOrigins = process.env.PROD_ORIGINS?.split(',') || []
+
 app.register(fastifyCors, {
-  origin: ['http://127.0.0.1:5173', 'http://127.0.0.1:5174'],
+  origin: env.NODE_ENV === 'production'
+    ? prodOrigins
+    : devOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
   credentials: true,
