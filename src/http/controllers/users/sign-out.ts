@@ -4,8 +4,8 @@ export async function signOut(_: FastifyRequest, reply: FastifyReply) {
   return reply
     .clearCookie('refreshToken', {
       path: '/',
-      secure: true,
-      sameSite: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
       httpOnly: true,
     })
     .status(200)

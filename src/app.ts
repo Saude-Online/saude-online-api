@@ -48,6 +48,10 @@ app.register(fastifyJwt, {
   sign: { expiresIn: '7d' },
 } as CustomFastifyJWTOptions)
 
+app.get('/', (_, reply) => {
+  reply.send('SaúdeOnline API')
+})
+
 app.register(fastifyCookie)
 
 app.register(usersRoutes)
