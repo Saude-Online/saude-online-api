@@ -1,7 +1,8 @@
 import fastify from 'fastify'
 import fastifyCors from '@fastify/cors'
-import fastifyJwt from '@fastify/jwt'
 import fastifyCookie from '@fastify/cookie'
+import fastifyJwt from '@fastify/jwt'
+import type { FastifyJWTOptions } from '@fastify/jwt'
 
 import { ZodError } from 'zod'
 
@@ -9,6 +10,15 @@ import { usersRoutes } from '@/http/controllers/users/routes'
 import { patientsRoutes } from '@/http/controllers/patients/routes'
 import { schedulesRoutes } from '@/http/controllers/schedules/routes'
 import { env } from '@/env'
+
+interface CustomFastifyJWTOptions extends FastifyJWTOptions {
+  cookie: {
+    cookieName: string
+    signed: boolean
+    secure: boolean
+    sameSite: 'strict' | 'lax' | 'none'
+  }
+}
 
 export const app = fastify({
   logger: env.NODE_ENV !== 'production',
@@ -32,9 +42,11 @@ app.register(fastifyJwt, {
   cookie: {
     cookieName: 'refreshToken',
     signed: false,
+    secure: env.NODE_ENV === 'production',
+    sameSite: 'none',
   },
   sign: { expiresIn: '7d' },
-})
+} as CustomFastifyJWTOptions)
 
 app.register(fastifyCookie)
 
