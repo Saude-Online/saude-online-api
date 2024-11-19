@@ -42,7 +42,7 @@ app.register(fastifyJwt, {
   cookie: {
     cookieName: 'refreshToken',
     signed: false,
-    secure: env.NODE_ENV === 'production',
+    secure: true,
     sameSite: 'none',
   },
   sign: { expiresIn: '7d' },

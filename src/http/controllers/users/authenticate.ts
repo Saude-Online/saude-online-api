@@ -44,7 +44,7 @@ export async function authenticate(
     return reply
       .setCookie('refreshToken', refreshToken, {
         path: '/',
-        secure: process.env.NODE_ENV === 'production',
+        secure: true,
         sameSite: 'none',
         httpOnly: true,
       })
