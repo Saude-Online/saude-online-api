@@ -35,16 +35,17 @@ model User {
 }
 
 model Patient {
-  id        String     @id @default(uuid())
-  name      String
-  age       Int?
-  document  String     @unique
-  phone     String?
-  userId    String?    @unique
-  user      User?      @relation(fields: [userId], references: [id])
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  schedules Schedule[]
+  id           String         @id @default(uuid())
+  name         String
+  age          Int?
+  document     String         @unique
+  phone        String?
+  userId       String?        @unique
+  user         User?          @relation(fields: [userId], references: [id])
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  schedules    Schedule[]
+  examSchedule ExamSchedule[]
 
   @@map(name: "patients")
 }
@@ -56,6 +57,7 @@ model Schedule {
   specialistId String
   specialist   User     @relation(fields: [specialistId], references: [id])
   dateHour     DateTime
+  value        Int
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -65,10 +67,37 @@ model Schedule {
   @@map(name: "schedules")
 }
 
+model ExamSchedule {
+  id        String   @id @default(uuid())
+  patientId String
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  examId    String
+  exam      Exam     @relation(fields: [examId], references: [id])
+  dateHour  DateTime
+  value     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId], name: "examPatientId")
+  @@index([dateHour], name: "examDateHour")
+  @@index([patientId, dateHour], name: "examPatientId_date")
+  @@map(name: "exam_schedules")
+}
+
 model Specialty {
   id    String @id @default(uuid())
   name  String
+  value Int
   users User[] @relation("UserSpecialties")
 
   @@map(name: "specialties")
+}
+
+model Exam {
+  id           String         @id @default(uuid())
+  name         String         @unique
+  value        Int
+  examSchedule ExamSchedule[]
+
+  @@map(name: "exams")
 }
