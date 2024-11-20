@@ -9,6 +9,8 @@ import { ZodError } from 'zod'
 import { usersRoutes } from '@/http/controllers/users/routes'
 import { patientsRoutes } from '@/http/controllers/patients/routes'
 import { schedulesRoutes } from '@/http/controllers/schedules/routes'
+import { examsRoutes } from './http/controllers/exams/routes'
+
 import { env } from '@/env'
 
 interface CustomFastifyJWTOptions extends FastifyJWTOptions {
@@ -57,6 +59,7 @@ app.register(fastifyCookie)
 app.register(usersRoutes)
 app.register(patientsRoutes)
 app.register(schedulesRoutes)
+app.register(examsRoutes)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {

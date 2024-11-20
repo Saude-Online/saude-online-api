@@ -1,13 +1,14 @@
 import { prisma } from '@/lib/prisma'
+import type { ExamSchedule } from '@prisma/client'
 import { parseISO, isValid } from 'date-fns'
 
-interface fetchSchedulesUseCaseRequest {
+interface fetchExamSchedulesUseCaseRequest {
   query: string
   page: number
 }
 
-interface fetchSchedulesUseCaseResponse {
-  schedules: {
+interface fetchExamSchedulesUseCaseResponse {
+  examSchedules: {
     id: string
     dateHour: string
     value: string
@@ -23,10 +24,11 @@ function formatCurrency(valueInCents: number): string {
   return `R$ ${reais.replace('.', ',')}`
 }
 
-export async function fetchSchedulesUseCase({
+
+export async function fetchExamSchedulesUseCase({
   query,
   page,
-}: fetchSchedulesUseCaseRequest): Promise<fetchSchedulesUseCaseResponse> {
+}: fetchExamSchedulesUseCaseRequest): Promise<fetchExamSchedulesUseCaseResponse> {
   let dateFilter: Date | undefined
   let patientFilter: any = {}
 
@@ -45,7 +47,7 @@ export async function fetchSchedulesUseCase({
     }
   }
 
-  const schedules = await prisma.schedule.findMany({
+  const examSchedules = await prisma.examSchedule.findMany({
     where: {
       ...(dateFilter ? { date: { equals: dateFilter } } : {}),
       ...(patientFilter),
@@ -56,19 +58,18 @@ export async function fetchSchedulesUseCase({
       patient: true, // Inclui os dados do paciente relacionado
     },
   })
-
   // Formata o valor e outros campos antes de retornar
-  const formattedSchedules = schedules.map((schedule) => ({
-    id: schedule.id,
-    dateHour: schedule.dateHour,
-    value: formatCurrency(schedule.value), // Formata o valor
+  const formattedExamSchedules = examSchedules.map((examSchedule) => ({
+    id: examSchedule.id,
+    dateHour: examSchedule.dateHour,
+    value: formatCurrency(examSchedule.value), // Formata o valor
     patient: {
-      id: schedule.patient.id,
-      name: schedule.patient.name,
+      id: examSchedule.patient.id,
+      name: examSchedule.patient.name,
     },
   }))
 
   return {
-    schedules: formattedSchedules,
+    examSchedules: formattedExamSchedules,
   }
 }
