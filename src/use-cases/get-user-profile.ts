@@ -20,7 +20,16 @@ export async function getUserProfileUseCase({
     include: {
       patient: {
         include: {
-          schedules: true, // Inclui as consultas do paciente
+          schedules: {
+            include: {
+              specialist: { select: { name: true } },
+            },
+          },
+          examSchedule: {
+            include: {
+              exam: { select: { name: true } },
+            },
+          },
         },
       },
     },
@@ -30,8 +39,30 @@ export async function getUserProfileUseCase({
     throw new ResourceNotFoundError()
   }
 
+  // Formatar os valores 'value' em R$
+  const formatToBRL = (value: number) =>
+    new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value / 100)
+
   if (user.patient) {
-    user.schedules = user.patient.schedules
+    // Remover campos indesejados de schedules
+    user.patient.schedules = user.patient.schedules.map(schedule => {
+      const { value, specialist, ...rest } = schedule // Remove 'value' e 'specialist'
+      return {
+        ...rest,
+        formattedValue: formatToBRL(value),
+        specialistName: specialist?.name,
+      }
+    })
+
+    // Remover campos indesejados de examSchedule
+    user.patient.examSchedule = user.patient.examSchedule.map(exam => {
+      const { value, exam: examDetails, ...rest } = exam // Remove 'value' e 'exam'
+      return {
+        ...rest,
+        formattedValue: formatToBRL(value),
+        examName: examDetails?.name,
+      }
+    })
   }
 
   Reflect.deleteProperty(user, 'password')
