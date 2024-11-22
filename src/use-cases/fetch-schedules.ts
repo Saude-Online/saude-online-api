@@ -60,8 +60,9 @@ export async function fetchSchedulesUseCase({
   // Formata o valor e outros campos antes de retornar
   const formattedSchedules = schedules.map((schedule) => ({
     id: schedule.id,
-    dateHour: schedule.dateHour,
+    dateHour: schedule.dateHour.toISOString(),
     value: formatCurrency(schedule.value), // Formata o valor
+    patientName: schedule.patient.name,
     patient: {
       id: schedule.patient.id,
       name: schedule.patient.name,
