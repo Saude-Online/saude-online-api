@@ -54,6 +54,7 @@ export async function fetchSchedulesUseCase({
     skip: (page - 1) * 20,
     include: {
       patient: true, // Inclui os dados do paciente relacionado
+      specialist: true, // Inclui os dados da especialidade relacionada
     },
   })
 
@@ -63,6 +64,7 @@ export async function fetchSchedulesUseCase({
     dateHour: schedule.dateHour.toISOString(),
     value: formatCurrency(schedule.value), // Formata o valor
     patientName: schedule.patient.name,
+    specialtyName: schedule.specialist.name,
     patient: {
       id: schedule.patient.id,
       name: schedule.patient.name,
