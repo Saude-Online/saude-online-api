@@ -10,6 +10,7 @@ import { usersRoutes } from '@/http/controllers/users/routes'
 import { patientsRoutes } from '@/http/controllers/patients/routes'
 import { schedulesRoutes } from '@/http/controllers/schedules/routes'
 import { examsRoutes } from './http/controllers/exams/routes'
+import { anamnesisRoutes } from './http/controllers/anamnesis/routes'
 
 import { env } from '@/env'
 
@@ -60,6 +61,7 @@ app.register(usersRoutes)
 app.register(patientsRoutes)
 app.register(schedulesRoutes)
 app.register(examsRoutes)
+app.register(anamnesisRoutes)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {

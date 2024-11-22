@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { Patient } from '@prisma/client'
+import type { Patient } from '@prisma/client'
 
 interface fetchPatientsUseCaseRequest {
   query: string

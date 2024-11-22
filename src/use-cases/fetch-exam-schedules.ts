@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/prisma'
-import type { ExamSchedule } from '@prisma/client'
 import { parseISO, isValid } from 'date-fns'
 
 interface fetchExamSchedulesUseCaseRequest {
