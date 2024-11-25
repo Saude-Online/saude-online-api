@@ -7,6 +7,10 @@ interface deletePatientUseCaseRequest {
 export async function deletePatientUseCase({
   id,
 }: deletePatientUseCaseRequest): Promise<void> {
+  await prisma.schedule.deleteMany({ where: { patientId: id } })
+  await prisma.examSchedule.deleteMany({ where: { patientId: id } })
+  await prisma.anamnesis.deleteMany({ where: { patientId: id } })
+
   await prisma.patient.delete({
     where: {
       id,

@@ -44,9 +44,9 @@ model Patient {
   user         User?          @relation(fields: [userId], references: [id])
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  schedules    Schedule[]
-  examSchedule ExamSchedule[]
-  anamneses    Anamnesis[]
+  schedules    Schedule[]     @relation(onDelete: Cascade)
+  examSchedule ExamSchedule[] @relation(onDelete: Cascade)
+  anamneses    Anamnesis[]    @relation(onDelete: Cascade)
 
   @@map(name: "patients")
 }
