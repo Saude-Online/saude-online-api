@@ -30,6 +30,7 @@ export async function getUserProfileUseCase({
               exam: { select: { name: true } },
             },
           },
+          anamneses: true
         },
       },
     },
