@@ -23,7 +23,7 @@ export async function usersRoutes(app: FastifyInstance) {
     protectedRoutes.addHook('onRequest', verifyJWT)
 
     protectedRoutes.get('/users', list)
-    protectedRoutes.get('/me', profile)
+    protectedRoutes.get('/me:userId?', profile)
     protectedRoutes.put('/users/:id', updateUser)
   })
 }
