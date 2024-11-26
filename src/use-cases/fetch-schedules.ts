@@ -64,6 +64,7 @@ export async function fetchSchedulesUseCase({
     dateHour: schedule.dateHour.toISOString(),
     value: formatCurrency(schedule.value), // Formata o valor
     patientName: schedule.patient.name,
+    patientPhone: schedule.patient.phone,
     specialtyName: schedule.specialist.name,
     patient: {
       id: schedule.patient.id,
