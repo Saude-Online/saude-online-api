@@ -1,11 +1,13 @@
 import { prisma } from '@/lib/prisma'
-import { Patient } from '@prisma/client'
+import type { Patient } from '@prisma/client'
 
 interface updatePatientUseCaseRequest {
   id: string
   data: {
     name?: string
-    age?: number
+    age?: number | null
+    weight?: string
+    height?: string
     document?: string
   }
 }

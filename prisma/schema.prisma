@@ -38,6 +38,8 @@ model Patient {
   id           String         @id @default(uuid())
   name         String
   age          Int?
+  weight       String?
+  height       String?
   document     String         @unique
   phone        String?
   userId       String?        @unique

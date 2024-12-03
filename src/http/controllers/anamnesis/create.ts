@@ -1,11 +1,11 @@
-import type { FastifyRequest, FastifyReply } from 'fastify';
-import { z } from 'zod';
+import type { FastifyRequest, FastifyReply } from 'fastify'
+import { z } from 'zod'
 
-import { createAnamnesisUseCase } from '@/use-cases/create-anamnesis';
+import { createAnamnesisUseCase } from '@/use-cases/create-anamnesis'
 
 export async function createAnamnesis(
   request: FastifyRequest,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) {
   const createBodySchema = z.object({
     patientId: z.string(),
@@ -15,7 +15,7 @@ export async function createAnamnesis(
     symptoms: z.string(),
     medicalHistory: z.string().optional(),
     allergies: z.string().optional(),
-  });
+  })
 
   try {
     const {
@@ -26,7 +26,7 @@ export async function createAnamnesis(
       symptoms,
       medicalHistory,
       allergies,
-    } = createBodySchema.parse(request.body);
+    } = createBodySchema.parse(request.body)
 
     await createAnamnesisUseCase({
       patientId,
@@ -36,19 +36,21 @@ export async function createAnamnesis(
       symptoms,
       medicalHistory,
       allergies,
-    });
+    })
 
     // Resposta de sucesso
-    return reply.status(201).send();
+    return reply.status(201).send()
   } catch (error) {
     // Tratamento de erro de validação
     if (error instanceof z.ZodError) {
       return reply
         .status(400)
-        .send({ message: 'Invalid request data', errors: error.errors });
+        .send({ message: 'Invalid request data', errors: error.errors })
     }
 
     // Tratamento de outros erros
-    return reply.status(500).send({ message: error.message || 'Internal server error.' });
+    return reply
+      .status(500)
+      .send({ message: error.message || 'Internal server error.' })
   }
 }
