@@ -5,7 +5,7 @@ import { updatePatientUseCase } from '@/use-cases/update-patient'
 
 export async function updatePatient(
   request: FastifyRequest,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) {
   const updatePatientParamsSchema = z.object({
     id: z.string().uuid(),

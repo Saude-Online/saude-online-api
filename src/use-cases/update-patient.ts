@@ -9,6 +9,7 @@ interface updatePatientUseCaseRequest {
     weight?: string
     height?: string
     document?: string
+    avatar?: string
   }
 }
 

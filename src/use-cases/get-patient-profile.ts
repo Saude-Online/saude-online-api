@@ -13,7 +13,6 @@ interface getPatientProfileUseCaseResponse {
 export async function getPatientProfileUseCase({
   userId,
 }: getPatientProfileUseCaseRequest): Promise<getPatientProfileUseCaseResponse> {
-  console.log(userId, 'userId')
   const patient = await prisma.patient.findUnique({
     where: {
       id: userId,
@@ -29,7 +28,7 @@ export async function getPatientProfileUseCase({
           exam: { select: { name: true } },
         },
       },
-      anamneses: true
+      anamneses: true,
     },
   })
 
@@ -39,7 +38,10 @@ export async function getPatientProfileUseCase({
 
   // Formatar os valores 'value' em R$
   const formatToBRL = (value: number) =>
-    new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value / 100)
+    new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value / 100)
 
   if (patient) {
     // Remover campos indesejados de schedules
