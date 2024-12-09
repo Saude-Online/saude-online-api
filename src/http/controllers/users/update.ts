@@ -13,6 +13,7 @@ export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
 
   const updateUserBodySchema = z.object({
     name: z.string().optional(),
+    avatar: z.string().optional(),
     age: z.number().nullable(),
     weight: z.string().optional(),
     height: z.string().optional(),
@@ -21,7 +22,7 @@ export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
   })
 
   const { id } = updateUserParamsSchema.parse(request.params)
-  const { name, age, weight, height, oldPassword, newPassword } =
+  const { name, avatar, age, weight, height, oldPassword, newPassword } =
     updateUserBodySchema.parse(request.body)
 
   if (oldPassword && !newPassword) {
@@ -42,13 +43,14 @@ export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
       where: { userId: id },
     })
 
-    if (patient && (weight || height)) {
+    if (patient && (weight || height || avatar)) {
       await updatePatientUseCase({
         id: patient.id,
         data: {
           age,
           weight,
           height,
+          avatar,
         },
       })
     }

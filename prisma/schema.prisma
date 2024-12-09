@@ -42,6 +42,7 @@ model Patient {
   height       String?
   document     String         @unique
   phone        String?
+  avatar       String?
   userId       String?        @unique
   user         User?          @relation(fields: [userId], references: [id])
   createdAt    DateTime       @default(now())
